@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SignIn&SignUp</title>
+  <link rel="stylesheet" type="text/css" href="./style.css" />
+  <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="forms-container">
+      <div class="signin-signup">
+        <form action="#" class="sign-in-form" id="login-form">
+          <h2 class="title">Sign In</h2>
+          <div class="input-field">
+            <i class="fas fa-user"></i>
+            <input type="text" placeholder="Username" id="username-input" />
+          </div>
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <input type="password" placeholder="Password" id="password-input" />
+          </div>
+          <input type="submit" value="Login" class="btn solid" />
+
+          <p class="social-text">Or Sign in with social platforms</p>
+          <div class="social-media">
+            <a href="#" class="social-icon">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-icon">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-icon">
+              <i class="fab fa-google"></i>
+            </a>
+            <a href="#" class="social-icon">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+          </div>
+        </form>
+
+        <!-- Your existing sign-up form here -->
+
+      </div>
+    </div>
+    <div class="panels-container">
+      <!-- Your existing panels here -->
+
+    </div>
+  </div>
+
+  <!-- Firebase SDK and authentication functions -->
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCnqcq3VIglO8RD6HbUzNs5JH6oNoi6s68",
+      authDomain: "ranveer-48b39.firebaseapp.com",
+      databaseURL: "https://ranveer-48b39-default-rtdb.firebaseio.com",
+      projectId: "ranveer-48b39",
+      storageBucket: "ranveer-48b39.appspot.com",
+      messagingSenderId: "567385188515",
+      appId: "1:567385188515:web:63a0102f820ebdf2e03716",
+      measurementId: "G-R7YD7FFL41"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const analytics = firebase.analytics();
+    const auth = firebase.auth();
+  </script>
+
+  <script>
+    const loginForm = document.getElementById('login-form');
+
+    loginForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const username = document.getElementById('username-input').value;
+        const password = document.getElementById('password-input').value;
+
+        // Check if the username and password match
+        if (username === '123' && password === '123') {
+          window.location.href = 'e-volt/Dashboard.html';
+        } else {
+            alert('Invalid username or password');
+        }
+    });
+  </script>
+</body>
+</html>

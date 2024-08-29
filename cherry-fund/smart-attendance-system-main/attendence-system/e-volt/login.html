@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Simulation Game</title>
+    <style>
+        /* Your existing CSS styles here */
+        /* Add any additional styles for login/signup form */
+        .login-container {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        .login-container h2 {
+            text-align: center;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .login-container button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Stock Simulation Game</h1>
+    </header>
+
+    <!-- Login/Signup Form -->
+    <div class="login-container">
+        <h2>Login / Sign Up</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button id="login">Login</button>
+        <button id="signup">Sign Up</button>
+    </div>
+
+    <div id="container">
+        <!-- Your existing panels here -->
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Stock Simulation Game</p>
+    </footer>
+
+    <script>
+        // Dummy user data (replace with actual data storage)
+        const users = [
+            { username: "user", password: "pass" }
+        ];
+
+        function authenticate(username, password) {
+            // Check if the username and password match any user data
+            return users.some(user => user.username === username && user.password === password);
+        }
+
+        document.getElementById("login").addEventListener("click", () => {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            if (authenticate(username, password)) {
+                // Redirect to another page upon successful login
+                window.location.href = "file:///C:/Users/varun/Desktop/STOCK.html";
+            } else {
+                alert("Invalid username or password.");
+            }
+        });
+
+        document.getElementById("signup").addEventListener("click", () => {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            if (!users.some(user => user.username === username)) {
+                // Add the new user to the list
+                users.push({ username: username, password: password });
+                alert("Sign up successful! You can now login.");
+            } else {
+                alert("Username already exists. Please choose a different one.");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Investment Portfolio</title>
+    <meta charset="UTF-8">
+    <!-- Firebase configuration script -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCuA6poN9k-AUZXxgLGs_pm8FOXbzkZH1g",
+            authDomain: "rfidattendance-c6ac1.firebaseapp.com",
+            databaseURL: "https://rfidattendance-c6ac1-default-rtdb.firebaseio.com",
+            projectId: "rfidattendance-c6ac1",
+            storageBucket: "rfidattendance-c6ac1.appspot.com",
+            messagingSenderId: "291958559206",
+            appId: "1:291958559206:web:11d42b02c5c8a49c4c4627"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <!-- Stylesheets -->
+    <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous"/>
+    <link href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.dataTables.min.css" rel="stylesheet">
+    <style>
+        /* Enhanced CSS for a more interactive page */
+
+        /* Body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        /* Header styling */
+        .heading {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .heading h1 {
+            font-size: 2.5em;
+            color: #4a4a4a;
+            letter-spacing: 1px;
+            margin-bottom: 0;
+        }
+
+        /* Card and container styling */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: white;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.25em;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Table styling */
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .table th {
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table tr {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Button styling */
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        /* Tooltip styling */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above */
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Table animation */
+        .table td {
+            position: relative;
+        }
+
+        .table td::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -10px;
+            height: 100%;
+            width: 5px;
+            background-color: #007bff;
+            transform: scaleY(0);
+            transition: all 0.3s ease;
+        }
+
+        .table tr:hover td::before {
+            transform: scaleY(1);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .heading h1 {
+                font-size: 2em;
+            }
+
+            .card-body {
+                padding: 15px;
+            }
+
+            .btn-primary {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+
+            .table th, .table td {
+                padding: 10px;
+            }
+        }
+
+        /* Animation for button click */
+        @keyframes buttonClick {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .btn-primary:active {
+            animation: buttonClick 0.2s;
+        }
+
+        /* Smooth transitions for page elements */
+        .card, .btn-primary, .table {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+<div class="heading">
+    <h1>Investment Portfolio</h1>
+</div>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <i class="fa fa-table mr-1"></i>
+            Your Investments
+        </div>
+        <div class="card-body">
+            <button type="button" class="btn btn-primary tooltip" id="export">
+                <i class="fa fa-download" aria-hidden="true"></i> Export CSV
+                <span class="tooltiptext">Download your investment data</span>
+            </button>
+            <div class="table-responsive">
+                <table class="table table-bordered display responsive nowrap" id="investmentTable" width="100%" cellspacing="0" data-order="[]">
+                    <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Investment Amount</th>
+                        <th>Date of Investment</th>
+                        <th>Current Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Investment data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript libraries -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+
+    <!-- Your JavaScript code -->
+    <script>
+        $(function(){
+            // Initialize DataTable with export buttons
+            var investmentTable = $('#investmentTable').DataTable({
+                "ordering": false,
+                "paging": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        filename: 'investment_portfolio',
+                        title: 'Investment Portfolio',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }
+                ],
+                data: [
+                    {companyName: "Company A", investmentAmount: 1000, dateOfInvestment: "2024-01-01", currentValue: 1200},
+                    {companyName: "Company B", investmentAmount: 2000, dateOfInvestment: "2024-03-15", currentValue: 2200}
+                    // More data rows...
+                ],
+                columns: [
+                    { data: 'companyName', title: 'Company Name' },
+                    { data: 'investmentAmount', title: 'Investment Amount' },
+                    { data: 'dateOfInvestment', title: 'Date of Investment' },
+                    { data: 'currentValue', title: 'Current Value' }
+                ]
+            });
+
+            // Export button click event
+            $('#export').on('click', function() {
+                investmentTable.button('.buttons-csv').trigger();
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

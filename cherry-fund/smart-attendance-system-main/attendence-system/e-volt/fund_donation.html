@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Simulation Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        #container {
+            width: 80%;
+            margin: 20px auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .panel {
+            flex: 1 1 30%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+            border-radius: 0 0 10px 10px;
+        }
+
+        select, input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: calc(50% - 10px);
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .transaction-history {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .stock-updates {
+            margin-top: 20px;
+        }
+
+        .transaction-history p {
+            margin: 5px 0;
+        }
+
+        .stock-updates div {
+            margin-bottom: 5px;
+        }
+
+        .news {
+            margin-top: 20px;
+        }
+
+        .news-item {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        h3 {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .balance {
+            font-size: 20px;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 400px !important;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Stock Simulation Game</h1>
+    </header>
+
+    <div id="container">
+        <div class="panel">
+            <h2>Stock Information</h2>
+            <h3>Stocks</h3>
+            <select id="stocks">
+                <option value="EUR/USD" data-price="150">EUR/USD</option>
+                <option value="GBP/USD" data-price="200">GBP/USD</option>
+                <option value="EUR/GBP" data-price="180">EUR/GBP</option>
+                <option value="GBP/JPY" data-price="220">GBP/JPY</option>
+                <option value="FTSE 100" data-price="7000">FTSE 100</option>
+                <option value="DOW JONES" data-price="30000">DOW JONES</option>
+                <option value="$AUSSIE 200" data-price="6500">$AUSSIE 200</option>
+                <option value="NIKKEI 225" data-price="28000">NIKKEI 225</option>
+                <option value="Facebook" data-price="300">Facebook</option>
+                <option value="Apple" data-price="150">Apple</option>
+                <option value="Microsoft" data-price="250">Microsoft</option>
+                <option value="BMW" data-price="80">BMW</option>
+            </select>
+            <input type="number" id="quantity" placeholder="Quantity">
+            <button id="buy">Buy</button>
+            <button id="sell">Sell</button>
+        </div>
+
+        <div class="panel">
+            <h2>Stock Updates</h2>
+            <div class="stock-updates" id="stock-updates">
+                <!-- Placeholder for stock updates -->
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Transactions</h2>
+            <div class="transaction-history" id="transaction-history">
+                <!-- Placeholder for transaction history -->
+            </div>
+            <button id="view-graph">View Graph</button>
+            <span class="balance" id="balance">Balance: $10000.00</span>
+            <canvas id="transactions-graph" style="display: none; margin-top: 20px;"></canvas>
+        </div>
+
+        <div class="panel">
+            <h2>News</h2>
+            <div class="news" id="news">
+                <!-- Placeholder for news -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Stock Simulation Game</p>
+    </footer>
+
+    <script>
+        const transactions = [];
+        let balance = 10000;
+
+        function displayTransactionHistory() {
+            const transactionHistoryElement = document.getElementById("transaction-history");
+            transactionHistoryElement.innerHTML = "";
+            transactions.forEach(transaction => {
+                const row = document.createElement("div");
+                row.innerHTML = `<p>${transaction.type} ${transaction.quantity} ${transaction.stock} at $${transaction.price.toFixed(2)}</p>`;
+                transactionHistoryElement.appendChild(row);
+            });
+        }
+
+        function displayStockUpdates() {
+            const stockUpdatesElement = document.getElementById("stock-updates");
+            stockUpdatesElement.innerHTML = "";
+            const stocks = document.querySelectorAll("#stocks option");
+            stocks.forEach(stock => {
+                const option = document.createElement("div");
+                const randomValue = Math.random() * (0.2 - (-0.2)) + (-0.2);
+                const currentPrice = parseFloat(stock.dataset.price);
+                const fluctuatedPrice = currentPrice + (currentPrice * randomValue);
+                option.textContent = `${stock.value}: $${fluctuatedPrice.toFixed(2)}`;
+                stockUpdatesElement.appendChild(option);
+                stock.dataset.value = fluctuatedPrice;
+            });
+        }
+
+        function updateStockValues() {
+            displayStockUpdates();
+        }
+
+        setInterval(updateStockValues, 2000);
+        updateStockValues();
+
+        document.getElementById("buy").addEventListener("click", () => {
+            const quantity = parseInt(document.getElementById("quantity").value);
+            if (!isNaN(quantity) && quantity > 0) {
+                const stock = document.getElementById("stocks").value;
+                const price = parseFloat(document.querySelector("#stocks option:checked").dataset.value);
+                transactions.push({ type: "Buy", stock: stock, quantity: quantity, price: price });
+                balance -= quantity * price;
+                displayTransactionHistory();
+                document.getElementById("balance").textContent = `Balance: $${balance.toFixed(2)}`;
+            } else {
+                alert("Please enter a valid quantity.");
+            }
+        });
+
+        document.getElementById("sell").addEventListener("click", () => {
+            const quantity = parseInt(document.getElementById("quantity").value);
+            if (!isNaN(quantity) && quantity > 0) {
+                const stock = document.getElementById("stocks").value;
+                const price = parseFloat(document.querySelector("#stocks option:checked").dataset.value);
+                transactions.push({ type: "Sell", stock: stock, quantity: quantity, price: price });
+                balance += quantity * price;
+                displayTransactionHistory();
+                document.getElementById("balance").textContent = `Balance: $${balance.toFixed(2)}`;
+            } else {
+                alert("Please enter a valid quantity.");
+            }
+        });
+
+        document.getElementById("view-graph").addEventListener("click", () => {
+            const ctx = document.getElementById('transactions-graph').getContext('2d');
+            const transactionAmounts = transactions.map(t => t.quantity * t.price);
+
+            const graphData = {
+                labels: transactions.map((t, index) => `Transaction ${index + 1}`),
+                datasets: [{
+                    label: 'Transaction Amounts',
+                    data: transactionAmounts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            if (window.transactionsChart) {
+                window.transactionsChart.destroy();
+            }
+
+            window.transactionsChart = new Chart(ctx, {
+                type: 'bar',
+                data: graphData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            document.getElementById('transactions-graph').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Time Table 2023-24</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+            font-size: 1em;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        tfoot td {
+            font-weight: bold;
+            background-color: #f4f4f4;
+            text-align: right;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1em;
+            margin: 4px 2px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .view-dropdown {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .view-dropdown select {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-input {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 300px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .highlight {
+            background-color: #ffff99;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Investment Time Table 2023-24</h1>
+        
+        <div class="view-dropdown">
+            <label for="viewSelect">View: </label>
+            <select id="viewSelect" onchange="changeView()">
+                <option value="normal">Normal View</option>
+                <option value="dayOrder">Day Order View</option>
+            </select>
+        </div>
+
+        <div id="normalView" class="view">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search for investments..." onkeyup="filterTable()">
+            </div>
+
+            <table id="timetable">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Date</th>
+                        <th>Investment Type</th>
+                        <th>Amount</th>
+                        <th>Return</th>
+                        <th>Risk Level</th>
+                        <th>Duration</th>
+                        <th>Investment Manager</th>
+                        <th>Account Number</th>
+                        <th>Bank</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added by JavaScript -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Total Investment</td>
+                        <td colspan="7" id="total-amount">50000</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div id="dayOrderView" class="view" style="display: none;">
+            <table id="timetableDayOrder">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Investment 1</th>
+                        <th>Investment 2</th>
+                        <th>Investment 3</th>
+                        <th>Investment 4</th>
+                        <th>Investment 5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="button-container">
+            <button class="button" onclick="printTable()">Print Table</button>
+        </div>
+        
+        <div class="footer">
+            © 2024 Investment Time Table | Created with ❤️
+        </div>
+    </div>
+
+    <script>
+        const timetableDataNormal = [
+            { sno: 1, date: '2023-09-01', type: 'Stocks', amount: 10000, return: '5%', risk: 'Medium', duration: '1 Year', manager: 'John Doe', account: '1234567890', bank: 'ABC Bank', notes: 'Long-term investment' },
+            { sno: 2, date: '2023-09-15', type: 'Bonds', amount: 20000, return: '3%', risk: 'Low', duration: '2 Years', manager: 'Jane Smith', account: '0987654321', bank: 'XYZ Bank', notes: 'Safe investment' },
+            { sno: 3, date: '2023-10-01', type: 'Real Estate', amount: 15000, return: '8%', risk: 'High', duration: '5 Years', manager: 'Robert Brown', account: '1122334455', bank: 'LMN Bank', notes: 'High potential return' },
+            { sno: 4, date: '2023-10-15', type: 'Mutual Funds', amount: 10000, return: '4%', risk: 'Medium', duration: '1 Year', manager: 'Alice Green', account: '5566778899', bank: 'DEF Bank', notes: 'Diversified portfolio' },
+            // Add more rows as needed
+        ];
+
+        const timetableDataDayOrder = [
+            { time: '9:00 AM - 10:00 AM', investment1: 'Stocks', investment2: 'Bonds', investment3: 'Real Estate', investment4: 'Mutual Funds', investment5: '' },
+            { time: '10:00 AM - 11:00 AM', investment1: 'Real Estate', investment2: 'Stocks', investment3: 'Bonds', investment4: 'Mutual Funds', investment5: '' },
+            { time: '11:00 AM - 12:00 PM', investment1: 'Mutual Funds', investment2: 'Real Estate', investment3: 'Stocks', investment4: 'Bonds', investment5: '' },
+            { time: '12:00 PM - 1:00 PM', investment1: 'Bonds', investment2: 'Mutual Funds', investment3: 'Real Estate', investment4: 'Stocks', investment5: '' },
+            { time: '1:00 PM - 2:00 PM', investment1: 'Lunch Break', investment2: 'Lunch Break', investment3: 'Lunch Break', investment4: 'Lunch Break', investment5: 'Lunch Break' },
+            // Add more rows as needed
+        ];
+
+        function loadTableDataNormal() {
+            const tableBody = document.querySelector('#timetable tbody');
+            tableBody.innerHTML = '';
+            timetableDataNormal.forEach(row => {
+                const tr = document.createElement('tr');
+                Object.values(row).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function loadTableDataDayOrder() {
+            const tableBody = document.querySelector('#timetableDayOrder tbody');
+            tableBody.innerHTML = '';
+            timetableDataDayOrder.forEach(row => {
+                const tr = document.createElement('tr');
+                Object.values(row).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function changeView() {
+            const viewSelect = document.getElementById('viewSelect').value;
+            if (viewSelect === 'normal') {
+                document.getElementById('normalView').style.display = 'block';
+                document.getElementById('dayOrderView').style.display = 'none';
+                loadTableDataNormal();
+            } else if (viewSelect === 'dayOrder') {
+                document.getElementById('normalView').style.display = 'none';
+                document.getElementById('dayOrderView').style.display = 'block';
+                loadTableDataDayOrder();
+            }
+        }
+
+        function printTable() {
+            window.print();
+        }
+
+        function filterTable() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#timetable tbody tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                let match = false;
+                cells.forEach(cell => {
+                    if (cell.textContent.toLowerCase().includes(input)) {
+                        match = true;
+                    }
+                });
+                if (match) {
+                    row.classList.add('highlight');
+                } else {
+                    row.classList.remove('highlight');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTableDataNormal();
+        });
+    </script>
+</body>
+</html>

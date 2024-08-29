@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundraising Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            margin: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            background-color: #007bff;
+            color: #ffffff;
+            text-align: center;
+        }
+        .metric {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .metric-title {
+            font-size: 14px;
+            text-align: center;
+            color: #888;
+        }
+        .icon {
+            font-size: 36px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Fundraising Dashboard</h1>
+        <div class="row text-center">
+            <div class="col-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon">💰</div>
+                        <div class="metric">$1.5M</div>
+                        <div class="metric-title">Total Donations</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon">📈</div>
+                        <div class="metric">$200</div>
+                        <div class="metric-title">Average Donation</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon">👥</div>
+                        <div class="metric">7,500</div>
+                        <div class="metric-title">Total Donors</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon">🎯</div>
+                        <div class="metric">$500K</div>
+                        <div class="metric-title">Fundraising Goal</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon">🔄</div>
+                        <div class="metric">3%</div>
+                        <div class="metric-title">Goal Progress</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon">🌎</div>
+                        <div class="metric">20</div>
+                        <div class="metric-title">Countries Reached</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Monthly Donations ($)
+                    </div>
+                    <div class="card-body">
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Donations by Region ($)
+                    </div>
+                    <div class="card-body">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Donation Distribution
+                    </div>
+                    <div class="card-body">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Donor Demographics
+                    </div>
+                    <div class="card-body">
+                        <canvas id="doughnutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var options = {
+                responsive: true,
+                tooltips: {
+                    mode: 'index',
+                    intersect: false
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                }
+            };
+
+            // Line Chart
+            var ctxLine = document.getElementById('lineChart').getContext('2d');
+            var lineChart = new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                    datasets: [{
+                        label: 'Monthly Donations ($)',
+                        data: [15000, 20000, 30000, 25000, 40000, 45000, 50000],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: options
+            });
+
+            // Bar Chart
+            var ctxBar = document.getElementById('barChart').getContext('2d');
+            var barChart = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['North America', 'Europe', 'Asia', 'South America', 'Africa'],
+                    datasets: [{
+                        label: 'Donations by Region ($)',
+                        data: [100000, 75000, 50000, 30000, 20000],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: options
+            });
+
+            // Pie Chart
+            var ctxPie = document.getElementById('pieChart').getContext('2d');
+            var pieChart = new Chart(ctxPie, {
+                type: 'pie',
+                data: {
+                    labels: ['Online', 'Events', 'Direct Mail', 'Other'],
+                    datasets: [{
+                        label: 'Donation Distribution',
+                        data: [60, 25, 10, 5],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: options
+            });
+
+            // Doughnut Chart
+            var ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            var doughnutChart = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['18-25', '26-35', '36-50', '51+'],
+                    datasets: [{
+                        label: 'Donor Demographics',
+                        data: [20, 30, 35, 15],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: options
+            });
+        });
+    </script>
+</body>
+</html>
